@@ -22,8 +22,8 @@ const BottomTabBar = ({ navigation, state }) => {
         paddingBottom: insets.bottom
       }}
       onSelect={index => navigation.navigate(state.routeNames[index])}>
-      <BottomNavigationTab title='Home' icon={HomeIcon}/>
-      <BottomNavigationTab title='Settings' icon={SettingIcon}/>
+      <BottomNavigationTab title='홈' icon={HomeIcon}/>
+      <BottomNavigationTab title='설정' icon={SettingIcon}/>
     </BottomNavigation>
   )
 };
@@ -31,8 +31,8 @@ export default () => {
   return (
     <NavigationContainer>
       <Tab.Navigator tabBar={props => <BottomTabBar {...props} />}>
-        <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="Settings" component={SettingsStackScreen} />
+        <Tab.Screen name="홈" component={HomeStackScreen} />
+        <Tab.Screen name="설정" component={SettingsStackScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   )

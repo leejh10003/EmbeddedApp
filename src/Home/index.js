@@ -6,10 +6,10 @@ import DetailsScreen from '../Details';
 function HomeScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home screen</Text>
+      <Text>홈 화면</Text>
       <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
+        title="상세 확인하기"
+        onPress={() => navigation.navigate('상세')}
       />
     </View>
   );
@@ -20,8 +20,8 @@ const HomeStack = createStackNavigator();
 export default () => {
   return (
     <HomeStack.Navigator>
-      <HomeStack.Screen name="Home" component={HomeScreen} />
-      <HomeStack.Screen name="Details" component={DetailsScreen} />
+      <HomeStack.Screen name="홈" component={HomeScreen} />
+      <HomeStack.Screen name="상세" component={DetailsScreen} />
     </HomeStack.Navigator>
   );
 } 

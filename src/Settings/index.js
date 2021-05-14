@@ -7,10 +7,10 @@ import DetailsScreen from '../Details';
 function SettingsScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings screen</Text>
+      <Text>설정 화면</Text>
       <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
+        title="상세 확인하기"
+        onPress={() => navigation.navigate('상세')}
       />
     </View>
   );
@@ -20,8 +20,8 @@ const SettingsStack = createStackNavigator();
 export default () => {
   return (
     <SettingsStack.Navigator>
-      <SettingsStack.Screen name="Settings" component={SettingsScreen} />
-      <SettingsStack.Screen name="Details" component={DetailsScreen} />
+      <SettingsStack.Screen name="설정" component={SettingsScreen} />
+      <SettingsStack.Screen name="상세" component={DetailsScreen} />
     </SettingsStack.Navigator>
   );
 }
