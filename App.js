@@ -7,6 +7,11 @@ import { ThemeContext } from './src/theme-context';
 import * as eva from '@eva-design/eva';
 import messaging from '@react-native-firebase/messaging';
 import TabsNavigator from './src/bottom-navigationbar';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+const client = new ApolloClient({
+  uri: 'http://ec2-3-36-171-69.ap-northeast-2.compute.amazonaws.com:8080/v1/graphql',
+  cache: new InMemoryCache()
+});
 export default () => {
   const [theme, setTheme] = React.useState('light');
   const toggleTheme = () => {
@@ -18,7 +23,7 @@ export default () => {
     const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
   });
   return (
-    <>
+    <ApolloProvider client={client}>
       <IconRegistry icons={EvaIconsPack}/>
       <ThemeContext.Provider value={{ theme, toggleTheme }}>
         <ApplicationProvider {...eva} theme={eva[theme]}>
@@ -27,6 +32,6 @@ export default () => {
           </SafeAreaProvider>
         </ApplicationProvider>
       </ThemeContext.Provider>
-    </>
+    </ApolloProvider>
   );
 }
