@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Text, View, SafeAreaView } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DetailsScreen from '../Details';
 import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components';
 
