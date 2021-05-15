@@ -10,6 +10,8 @@ import NotificationScreen from './notification';
 import NotificationEntity, { EmptyIcon } from './notificationEntity';
 import Carousel from 'react-native-snap-carousel';
 import Tray from './tray';
+import { LineChart } from 'react-native-chart-kit';
+import moment from 'moment';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -21,6 +23,15 @@ const styles = StyleSheet.create({
 });
 
 const GET_CURRENT_ACTIVITIES = gql`query{
+  temperature: stock{
+    name
+    humidity_temperatures(order_by: {id:asc}){
+      id
+      temperature
+      humidity
+      created_at
+    }
+  }
   notification(limit: 3, order_by: [{id: desc}]){
     kind
     content
@@ -126,7 +137,10 @@ function ActivityScreen({ navigation }) {
             </Button>
           </Layout>
           <Layout style={{paddingBottom: 20}} />
-          <Divider />
+          <Divider style={{
+            marginLeft: 20,
+            marginRight: 20,
+          }}/>
           <Text
             category='h1'
             style={{
@@ -155,6 +169,68 @@ function ActivityScreen({ navigation }) {
                 <Tray item={item} />
               )}
             /> : <EmptyIcon />) : <Spinner/>}
+          <Layout style={{paddingBottom: 20}} />
+          <Divider style={{
+            marginLeft: 20,
+            marginRight: 20,
+          }}/>
+          <Text
+            category='h1'
+            style={{
+              marginTop: 30,
+              paddingLeft: 20,
+              paddingRight: 20
+            }}>온도</Text>
+          <Text
+            category='s2'
+            style={{
+              marginTop: 5,
+              paddingBottom: 40,
+              paddingLeft: 20,
+              paddingRight: 20
+            }}
+            >안정적인 온도를 유지하세요!</Text>
+            {loading === false ? <Card
+            style={{
+              width: Dimensions.get('window').width - 80,
+              marginLeft: 40
+            }}
+            header={() => (<LineChart
+              data={{
+                labels: data.temperature[0].humidity_temperatures.map((element) => moment(element.created_at).local().format('HH:mm')),
+                datasets: [
+                  {
+                    data: data.temperature[0].humidity_temperatures.map((element) => element.temperature - 273),
+                  },
+                ]
+              }}
+              width={Dimensions.get("window").width - 80} // from react-native
+              height={220}
+              yAxisSuffix="°C"
+              withOuterLines={false}
+              withDots={false}
+              withShadow={true}
+              chartConfig={{
+                backgroundColor: "#18ffff",
+                backgroundGradientFrom: "#40c4ff",
+                backgroundGradientTo: "#448aff",
+                color: (opacity=1) => `rgba(255, 255, 255, 0.8)`,
+                labelColor: (opacity) => `rgba(255, 255, 255, 1)`,
+                decimalPlaces: 2, // optional, defaults to 2dp
+                style: {
+                  borderRadius: 0,
+                },
+              }}
+              bezier
+            />)}>
+            <Text category='h5'>
+              {data.temperature[0].name}
+            </Text>
+            <View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={{color: 'grey'}}>평균 온도</Text>
+              <Text style={{fontWeight: 'bold'}}>{(data.temperature[0].humidity_temperatures.map((element) => element.temperature - 273).reduce((prev, next) => prev + next, 0) / data.temperature[0].humidity_temperatures.length).toFixed(2)}</Text>
+            </View>
+            </Card> : <Spinner />}
           <Layout style={{paddingBottom: 30}} />
         </Layout>
       </ScrollView>
