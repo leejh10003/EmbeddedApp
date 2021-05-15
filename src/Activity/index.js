@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, Dimension, Dimensions, Image } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Text, Button, Divider, Layout, Spinner, Icon} from '@ui-kitten/components';
+import { Text, Button, Divider, Layout, Spinner, Icon, Card} from '@ui-kitten/components';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import theme from '../../theme.json';
 import NotificationScreen from './notification';
 import NotificationEntity, { EmptyIcon } from './notificationEntity';
+import Carousel from 'react-native-snap-carousel';
+import Tray from './tray';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -85,7 +87,6 @@ const GET_CURRENT_ACTIVITIES = gql`query{
     }
   }
 }`
-
 function ActivityScreen({ navigation }) {
   const insets = useSafeAreaInsets();
   const { loading, error, data, refetch } = useQuery(GET_CURRENT_ACTIVITIES);
@@ -94,27 +95,33 @@ function ActivityScreen({ navigation }) {
       <Divider />
       <ScrollView>
         <Layout style={{
-          flex: 1,
-          paddingLeft: 20,
-          paddingRight: 20
+          flex: 1
         }}>
           <Text
             category='h1'
             style={{
-              marginTop: 40 + insets.top
+              marginTop: 40 + insets.top,
+              paddingLeft: 20,
+              paddingRight: 20
             }}>알림</Text>
           <Text
             category='s2'
             style={{
               marginTop: 5,
-              paddingBottom: 40
+              paddingBottom: 40,
+              paddingLeft: 20,
+              paddingRight: 20
             }}
             >그동안 냉장고에서는 어떤 일이 있었을까요?</Text>
           {loading === false ? (data.notification.length > 0 ? data.notification.map((item) => <NotificationEntity item={item}/>) : <EmptyIcon />) : <Spinner/>}
           <Layout style={{
-            alignItems: 'flex-end'
+            alignItems: 'flex-end',
+            paddingLeft: 20,
+            paddingRight: 20
           }}>
-            <Button onPress={() => navigation.navigate('알림')}style={{...styles.button, width: 'auto'}} appearance='ghost' status='primary' accessoryRight={() => <Icon style={{width: 16, height: 16}} fill={theme['color-primary-600']} name='arrow-circle-right-outline'/>}>
+            <Button onPress={() => navigation.navigate('알림')} style={{
+              ...styles.button,
+              width: 'auto'}} appearance='ghost' status='primary' accessoryRight={() => <Icon style={{width: 16, height: 16}} fill={theme['color-primary-600']} name='arrow-circle-right-outline'/>}>
               알림 더 보기
             </Button>
           </Layout>
@@ -123,15 +130,31 @@ function ActivityScreen({ navigation }) {
           <Text
             category='h1'
             style={{
-              marginTop: 30
+              marginTop: 30,
+              paddingLeft: 20,
+              paddingRight: 20
             }}>트레이</Text>
           <Text
             category='s2'
             style={{
               marginTop: 5,
-              paddingBottom: 40
+              paddingBottom: 40,
+              paddingLeft: 20,
+              paddingRight: 20
             }}
             >트레이의 현재상태를 볼까요?</Text>
+            {loading === false ? (data.tray.length > 0 ? <Carousel
+              data={data.tray}
+              layout={'default'}
+              sliderWidth={Dimensions.get('window').width}
+              itemWidth={Dimensions.get('window').width - 80}
+              loop={true}
+              inactiveSlideShift={0}
+              useScrollView={true}
+              renderItem={({item, index}) => (
+                <Tray item={item} />
+              )}
+            /> : <EmptyIcon />) : <Spinner/>}
           <Layout style={{paddingBottom: 30}} />
         </Layout>
       </ScrollView>

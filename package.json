@@ -18,6 +18,7 @@
     "@react-navigation/bottom-tabs": "^5.11.11",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.5",
+    "@types/react-native-snap-carousel": "^3.8.3",
     "@ui-kitten/components": "^5.1.0",
     "@ui-kitten/eva-icons": "^5.1.0",
     "appcenter": "4.1.0",
@@ -32,6 +33,7 @@
     "react-native-reanimated": "^2.1.0",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.2.0",
+    "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "^12.1.1",
     "subscriptions-transport-ws": "^0.9.18"
   },
