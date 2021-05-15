@@ -7,7 +7,7 @@ import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import theme from '../../theme.json';
 import NotificationScreen from './notification';
-import NotificationEntity from './notificationEntity';
+import NotificationEntity, { EmptyIcon } from './notificationEntity';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -20,10 +20,49 @@ const styles = StyleSheet.create({
 
 const GET_DOG_PHOTO = gql`query{
   notification(limit: 3, order_by: [{id: desc}]){
-    id
     kind
     content
     created_at
+    id
+    humidity_temperature{
+      id
+      stock{
+        id
+        name
+        weights(limit: 1, order_by: [{id: desc}]){
+          id
+          value
+          images(limit: 1, order_by: [{id: desc}]){
+            id
+            url
+          }
+        }
+      }
+    }
+    weight {
+      stock{
+        id
+        name
+      }
+      id
+      value
+      images(limit: 1, order_by: [{id: desc}]){
+        id
+        url
+      }
+    }
+    stock {
+      id
+      name
+      weights(limit: 1, order_by: [{id: desc}]) {
+        id
+        value
+        images(limit: 1, order_by: [{id: desc}]) {
+          id
+          url
+        }
+      }
+    }
   }
 }`
 
@@ -51,7 +90,7 @@ function ActivityScreen({ navigation }) {
               paddingBottom: 40
             }}
             >그동안 냉장고에서는 어떤 일이 있었을까요?</Text>
-          {loading === false ? data.notification.map((item) => <NotificationEntity item={item}/>) : <Spinner/>}
+          {loading === false ? (data.notification.length > 0 ? data.notification.map((item) => <NotificationEntity item={item}/>) : <EmptyIcon />) : <Spinner/>}
           <Layout style={{
             alignItems: 'flex-end'
           }}>

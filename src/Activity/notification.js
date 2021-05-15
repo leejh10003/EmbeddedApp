@@ -3,15 +3,54 @@ import { SafeAreaView, ScrollView } from 'react-native';
 import { Text, Divider, Layout, TopNavigation, Spinner } from '@ui-kitten/components';
 import gql from 'graphql-tag';
 import { useSubscription } from '@apollo/client';
-import NotificationEntity from './notificationEntity';
+import NotificationEntity, { EmptyIcon } from './notificationEntity';
 import BackButton from '../components/backButton';
 
 const GET_NOTIFICATION = gql`subscription GetNotification{
   notification(order_by: [{id: desc}]){
-    id
     kind
     content
     created_at
+    id
+    humidity_temperature{
+      id
+      stock{
+        id
+        name
+        weights(limit: 1, order_by: [{id: desc}]){
+          id
+          value
+          images(limit: 1, order_by: [{id: desc}]){
+            id
+            url
+          }
+        }
+      }
+    }
+    weight {
+      stock{
+        id
+        name
+      }
+      id
+      value
+      images(limit: 1, order_by: [{id: desc}]){
+        id
+        url
+      }
+    }
+    stock {
+      id
+      name
+      weights(limit: 1, order_by: [{id: desc}]) {
+        id
+        value
+        images(limit: 1, order_by: [{id: desc}]) {
+          id
+          url
+        }
+      }
+    }
   }
 }`
 
@@ -28,7 +67,7 @@ export default (props) => {
           paddingRight: 20,
           paddingTop: 30
         }}>
-          {!!!(error) ? (loading === false ? data.notification.map((item) => (<NotificationEntity item={item} />)) : <Layout style={{paddingTop: 10, alignItems: 'center'}}><Spinner/></Layout>) : <Text>{`${error}`}</Text>}
+          {!!!(error) ? (loading === false ? data.notification.length > 0 ? data.notification.map((item) => (<NotificationEntity item={item} />)) : (<EmptyIcon />) : <Layout style={{paddingTop: 10, alignItems: 'center'}}><Spinner/></Layout>) : <Text>{`${error}`}</Text>}
         </Layout>
       </ScrollView>
     </SafeAreaView>

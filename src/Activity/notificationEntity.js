@@ -1,6 +1,7 @@
 import * as React from 'react';
+import { useRef, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text, Card , Icon } from '@ui-kitten/components';
+import { Text, Card , Icon, Layout } from '@ui-kitten/components';
 import theme from '../../theme.json';
 import moment from 'moment';
 
@@ -49,6 +50,24 @@ const renderItemHeader = (headerProps, item) => {
       </Text>
     </View>)
 };
+export const EmptyIcon = () => {
+  const animationRef = React.useRef();
+  useEffect(() => {
+    animationRef.current.startAnimation();
+  })
+  return (<Layout style={{alignItems: 'center'}}>
+    <Icon style={{
+      height: 60,
+      width: 60,
+    }}
+    ref={animationRef}
+    fill='grey'
+    animation='shake'
+    name='loader-outline'/>
+    <Layout style={{ marginBottom: 30 }} />
+    <Text category='s2'>알림 내용이 없습니다.</Text>
+  </Layout>)
+}
 export default ({item}) => (
   <Card
     status={item.kind}
