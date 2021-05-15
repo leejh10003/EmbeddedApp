@@ -9,8 +9,8 @@ import SettingsStackScreen from './Settings';
 const SettingIcon = (props) => (
   <Icon {...props} name='settings-2-outline' />
 )
-const HomeIcon = (props) => (
-  <Icon {...props} name='home-outline' />
+const ActivityIcon = (props) => (
+  <Icon {...props} name='activity-outline' />
 )
 const Tab = createBottomTabNavigator();
 const BottomTabBar = ({ navigation, state }) => {
@@ -22,7 +22,7 @@ const BottomTabBar = ({ navigation, state }) => {
         paddingBottom: insets.bottom
       }}
       onSelect={index => navigation.navigate(state.routeNames[index])}>
-      <BottomNavigationTab title='홈' icon={HomeIcon}/>
+      <BottomNavigationTab title='현재 활동' icon={ActivityIcon}/>
       <BottomNavigationTab title='설정' icon={SettingIcon}/>
     </BottomNavigation>
   )
@@ -31,7 +31,7 @@ export default () => {
   return (
     <NavigationContainer>
       <Tab.Navigator tabBar={props => <BottomTabBar {...props} />}>
-        <Tab.Screen name="홈" component={HomeStackScreen} />
+        <Tab.Screen name="현재 활동" component={HomeStackScreen} />
         <Tab.Screen name="설정" component={SettingsStackScreen} />
       </Tab.Navigator>
     </NavigationContainer>
