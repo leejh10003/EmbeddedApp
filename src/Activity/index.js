@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const GET_DOG_PHOTO = gql`query{
+const GET_CURRENT_ACTIVITIES = gql`query{
   notification(limit: 3, order_by: [{id: desc}]){
     kind
     content
@@ -64,11 +64,31 @@ const GET_DOG_PHOTO = gql`query{
       }
     }
   }
+  tray(order_by: {id: asc}){
+    name
+    stocks(limit: 1, order_by: {id: desc}){
+      name
+      humidity_temperatures(limit: 1, order_by: {id: desc}){
+        temperature
+        humidity
+      }
+      weights(limit: 1, order_by: {id:desc}){
+        value
+      }
+    }
+    thumbnail: stocks(limit: 1, where: {weights: {images: {}}}, order_by: {id: desc}){
+      weights(limit: 1, where: {images: {}}, order_by: {id: desc}){
+        images(limit: 1, order_by: {id: desc}){
+          url
+        }
+      }
+    }
+  }
 }`
 
 function ActivityScreen({ navigation }) {
   const insets = useSafeAreaInsets();
-  const { loading, error, data, refetch } = useQuery(GET_DOG_PHOTO);
+  const { loading, error, data, refetch } = useQuery(GET_CURRENT_ACTIVITIES);
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }} >
       <Divider />
