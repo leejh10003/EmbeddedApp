@@ -8,11 +8,12 @@ import * as eva from '@eva-design/eva';
 import messaging from '@react-native-firebase/messaging';
 import TabsNavigator from './src/bottom-navigationbar';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import codePush from 'react-native-code-push'
 const client = new ApolloClient({
   uri: 'http://ec2-3-36-171-69.ap-northeast-2.compute.amazonaws.com:8080/v1/graphql',
   cache: new InMemoryCache()
 });
-export default () => {
+const App = () => {
   const [theme, setTheme] = React.useState('light');
   const toggleTheme = () => {
     const nextTheme = theme === 'light' ? 'dark' : 'light';
@@ -22,6 +23,10 @@ export default () => {
     const authStatus = await messaging().requestPermission();
     const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
   });
+  const codePushOptions = {
+    checkFrequency: codePush.CheckFrequency.ON_APP_START,
+    installMode: codePush.InstallMode.IMMEDIATE,
+  }
   return (
     <ApolloProvider client={client}>
       <IconRegistry icons={EvaIconsPack}/>
@@ -35,3 +40,4 @@ export default () => {
     </ApolloProvider>
   );
 }
+export default codepush(codePushOptions)(App)
