@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { View, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import DetailsScreen from '../Details';
-import { Text, Button, Divider, Layout, TopNavigation, Spinner, List, Card , Icon} from '@ui-kitten/components';
+import { Text, Button, Divider, Layout, Spinner, Icon} from '@ui-kitten/components';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import theme from '../../theme.json';
-import moment from 'moment';
 import NotificationScreen from './notification';
+import NotificationEntity from './notificationEntity';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -19,10 +18,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const WarningIcon = (props) => (
-  <Icon style={{width: 10}} {...props} name='alert-circle-outline'/>
-);
-
 const GET_DOG_PHOTO = gql`query{
   notification(limit: 3, order_by: [{id: desc}]){
     id
@@ -32,80 +27,11 @@ const GET_DOG_PHOTO = gql`query{
   }
 }`
 
-const mapString = (kind) => {
-  switch(kind){
-    case 'primary': return {
-      message: '주요',
-      icon: 'alert-circle-outline',
-      color: theme['color-primary-700']
-    };
-    case 'success': return {
-      message: '성공',
-      icon: 'checkmark-circle-outline',
-      color: theme['color-success-700']
-    };
-    case 'info': return {
-      message: '안내',
-      icon: 'bulb-outline',
-      color: theme['color-info-500']
-    };
-    case 'warning': return {
-      message: '주의',
-      icon: 'alert-triangle-outline',
-      color: theme['color-warning-700']
-    };
-    case 'danger': return {
-      message: '경고',
-      icon: 'close-circle-outline',
-      color: theme['color-danger-600']
-    };
-    case 'basic':
-    default: return {
-      message: '일반',
-      icon: 'message-square-outline',
-      color: 'black'
-    };
-  }
-}
-
 function ActivityScreen({ navigation }) {
   const insets = useSafeAreaInsets();
   const { loading, error, data, refetch } = useQuery(GET_DOG_PHOTO);
-
-  const renderItemHeader = (headerProps, item) => {
-    const { message, icon, color } = mapString(item.kind);
-    return(
-      <View {...headerProps} style={[headerProps.style, {flexDirection:'row', alignItems:'center'}]}>
-        <Icon style={{ width: 16, height: 16, marginRight: 10 }} fill={color} name={icon} />
-        <Text style={{color}}>
-          {message} 알림사항이 있습니다
-        </Text>
-      </View>)
-};
-  const renderItem = (item) => (
-    <Card
-      status={item.kind}
-      header={headerProps => renderItemHeader(headerProps, item)}
-      style={{
-        marginBottom: 10
-      }}
-      >
-        {/*footer={renderItemFooter} */}
-      <Text>
-        {item.content}
-      </Text>
-      <Text style={{
-        textAlign: 'right',
-        fontSize: 10,
-        color: 'grey'
-      }}>
-        {moment(item.created_at).local().format('YYYY-MM-DD HH:mm:ss')}
-      </Text>
-    </Card>
-  );
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }} >
-      {/*<TopNavigation title="현재 활동" alignment='center'/>*/}
       <Divider />
       <ScrollView>
         <Layout style={{
@@ -125,12 +51,7 @@ function ActivityScreen({ navigation }) {
               paddingBottom: 40
             }}
             >그동안 냉장고에서는 어떤 일이 있었을까요?</Text>
-          {loading === false ? data.notification.map((item) => renderItem(item)) : <Spinner/>}
-          {/*<Button
-            onPress={() => navigation.navigate('상세')}
-          >
-            상세 확인하기
-          </Button>*/}
+          {loading === false ? data.notification.map((item) => <NotificationEntity item={item}/>) : <Spinner/>}
           <Layout style={{
             alignItems: 'flex-end'
           }}>
