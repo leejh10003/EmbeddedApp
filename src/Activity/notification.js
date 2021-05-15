@@ -5,10 +5,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DetailsScreen from '../Details';
 import { Text, Button, Divider, Layout, TopNavigation, Spinner, List, Card , Icon} from '@ui-kitten/components';
 import gql from 'graphql-tag';
-import { useQuery } from '@apollo/client';
+import { useSubscription } from '@apollo/client';
 import theme from '../../theme.json';
 import moment from 'moment';
-import NotificationScreen from './notification';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -23,8 +22,8 @@ const WarningIcon = (props) => (
   <Icon style={{width: 10}} {...props} name='alert-circle-outline'/>
 );
 
-const GET_DOG_PHOTO = gql`query{
-  notification(limit: 3, order_by: [{id: desc}]){
+const GET_NOTIFICATION = gql`subscription GetNotification{
+  notification(order_by: [{id: desc}]){
     id
     kind
     content
@@ -68,9 +67,21 @@ const mapString = (kind) => {
   }
 }
 
-function ActivityScreen({ navigation }) {
+const BackIcon = (props) => (
+  <Icon {...props} name='arrow-back' />
+);
+
+export default ({ navigation }) => {
+
+  const navigateBack = () => {
+    navigation.goBack();
+  };
+
+  const BackAction = () => (
+    <TopNavigationAction icon={BackIcon} onPress={navigateBack}/>
+  );
   const insets = useSafeAreaInsets();
-  const { loading, error, data, refetch } = useQuery(GET_DOG_PHOTO);
+  const { data: { notification }, loading } = useSubscription(GET_NOTIFICATION);
 
   const renderItemHeader = (headerProps, item) => {
     const { message, icon, color } = mapString(item.kind);
@@ -104,9 +115,9 @@ function ActivityScreen({ navigation }) {
     </Card>
   );
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }} >
-      {/*<TopNavigation title="현재 활동" alignment='center'/>*/}
-      <Divider />
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <TopNavigation title='알림' alignment='center' accessoryLeft={BackAction}/>
+      <Divider/>
       <ScrollView>
         <Layout style={{
           flex: 1,
@@ -125,7 +136,7 @@ function ActivityScreen({ navigation }) {
               paddingBottom: 40
             }}
             >그동안 냉장고에서는 어떤 일이 있었을까요?</Text>
-          {loading === false ? data.notification.map((item) => renderItem(item)) : <Spinner/>}
+          {error === false ? notification.map((item) => renderItem(item)) : <Spinner/>}
           {/*<Button
             onPress={() => navigation.navigate('상세')}
           >
@@ -134,7 +145,7 @@ function ActivityScreen({ navigation }) {
           <Layout style={{
             alignItems: 'flex-end'
           }}>
-            <Button onPress={() => navigation.navigate('알림')}style={{...styles.button, width: 'auto'}} appearance='ghost' status='primary' accessoryRight={() => <Icon style={{width: 16, height: 16}} fill={theme['color-primary-600']} name='arrow-circle-right-outline'/>}>
+            <Button style={{...styles.button, width: 'auto'}} appearance='ghost' status='primary' accessoryRight={() => <Icon style={{width: 16, height: 16}} fill={theme['color-primary-600']} name='arrow-circle-right-outline'/>}>
               알림 더 보기
             </Button>
           </Layout>
@@ -155,17 +166,6 @@ function ActivityScreen({ navigation }) {
           <Layout style={{paddingBottom: 30}} />
         </Layout>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
-}
-
-const HomeStack = createStackNavigator();
-
-export default () => {
-  return (
-    <HomeStack.Navigator headerMode='none'>
-      <HomeStack.Screen name="현재 활동" component={ActivityScreen} />
-      <HomeStack.Screen name="알림" component={NotificationScreen} />
-    </HomeStack.Navigator>
-  );
-} 
+};
