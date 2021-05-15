@@ -13,6 +13,10 @@ const client = new ApolloClient({
   uri: 'http://ec2-3-36-171-69.ap-northeast-2.compute.amazonaws.com:8080/v1/graphql',
   cache: new InMemoryCache()
 });
+const codePushOptions = {
+  checkFrequency: codePush.CheckFrequency.ON_APP_START,
+  installMode: codePush.InstallMode.IMMEDIATE,
+}
 const App = () => {
   const [theme, setTheme] = React.useState('light');
   const toggleTheme = () => {
@@ -23,10 +27,6 @@ const App = () => {
     const authStatus = await messaging().requestPermission();
     const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
   });
-  const codePushOptions = {
-    checkFrequency: codePush.CheckFrequency.ON_APP_START,
-    installMode: codePush.InstallMode.IMMEDIATE,
-  }
   return (
     <ApolloProvider client={client}>
       <IconRegistry icons={EvaIconsPack}/>
@@ -40,4 +40,4 @@ const App = () => {
     </ApolloProvider>
   );
 }
-export default codepush(codePushOptions)(App)
+export default codePush(codePushOptions)(App)
