@@ -53,10 +53,10 @@ export default ({navigation, route: {params: { id, name }}}) => {
             ItemSeparatorComponent={Divider}
             ListHeaderComponent={<LineGraph
               data={{
-                labels: data?.stock?.[0]?.humidity_temperatures?.slice(Math.min(0, data?.stock?.[0]?.humidity_temperatures?.length - 6), data?.stock?.[0]?.humidity_temperatures?.length)?.reverse()?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
+                labels: data?.stock?.[0]?.humidity_temperatures?.slice(0, Math.min(data?.stock?.[0]?.humidity_temperatures?.length, 6))?.reverse()?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
                 datasets: [
                   {
-                    data: data?.stock?.[0]?.humidity_temperatures?.slice(Math.min(0, data?.stock?.[0]?.humidity_temperatures?.length - 6), data?.stock?.[0]?.humidity_temperatures?.length)?.reverse()?.map((element) => element.temperature - 273) ?? [],
+                    data: data?.stock?.[0]?.humidity_temperatures?.slice(0, Math.min(data?.stock?.[0]?.humidity_temperatures?.length, 6))?.reverse()?.map((element) => element.temperature - 273) ?? [],
                   },
                 ]
               }}

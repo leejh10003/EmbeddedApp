@@ -9,12 +9,13 @@ import theme from '../../theme.json';
 import NotificationScreen from './notification';
 import NotificationEntity, { EmptyIcon } from './notificationEntity';
 import Carousel from 'react-native-snap-carousel';
-import Tray from './trayCard';
+import TrayCard from './trayCard';
 import moment from 'moment';
 import LineGraphCard from '../components/lineGraphCard';
 import Temperature from './temperature';
 import Humidity from './humidity';
 import NoDataCard from '../components/noDataCard';
+import Tray from './tray';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -29,7 +30,7 @@ const GET_CURRENT_ACTIVITIES = gql`query{
   temperature_humidity: stock{
     id
     name
-    humidity_temperatures(order_by: {id:asc}, limit: 6){
+    humidity_temperatures(order_by: {id:desc}, limit: 6){
       id
       temperature
       humidity
@@ -60,6 +61,7 @@ const GET_CURRENT_ACTIVITIES = gql`query{
   }
   tray(order_by: {id: asc}){
     name
+    id
     stocks(limit: 1, order_by: {id: desc}){
       name
       humidity_temperatures(limit: 1, order_by: {id: desc}){
@@ -156,7 +158,8 @@ function ActivityScreen({ navigation }) {
               useScrollView={true}
               loop={true}
               renderItem={({item, index}) => (
-                <Tray
+                <TrayCard
+                  navigation={navigation}
                   style={{
                     width: Dimensions.get('window').width - 80,
                     marginLeft: 10
@@ -205,10 +208,10 @@ function ActivityScreen({ navigation }) {
                       }}
                       onPress={() => navigation.navigate('온도', {id: item.id, name: item.name})}
                       data={{
-                        labels: item?.humidity_temperatures?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
+                        labels: item?.humidity_temperatures?.slice()?.reverse()?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
                         datasets: [
                           {
-                            data: item?.humidity_temperatures?.map((element) => element.temperature - 273) ?? [],
+                            data: item?.humidity_temperatures?.slice()?.reverse()?.map((element) => element.temperature - 273) ?? [],
                           },
                         ]
                       }}
@@ -275,10 +278,10 @@ function ActivityScreen({ navigation }) {
                         marginLeft: 10
                       }}
                       data={{
-                        labels: item?.humidity_temperatures?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
+                        labels: item?.humidity_temperatures?.slice()?.reverse()?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
                         datasets: [
                           {
-                            data: item?.humidity_temperatures?.map((element) => element.humidity) ?? [],
+                            data: item?.humidity_temperatures?.slice()?.reverse()?.map((element) => element.humidity) ?? [],
                           },
                         ]
                       }}
@@ -322,6 +325,7 @@ export default () => {
       <HomeStack.Screen name="알림" component={NotificationScreen} />
       <HomeStack.Screen name="온도" component={Temperature} />
       <HomeStack.Screen name="습도" component={Humidity} />
+      <HomeStack.Screen name="트레이" component={Tray} />
     </HomeStack.Navigator>
   );
 } 
