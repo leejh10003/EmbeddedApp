@@ -39,6 +39,7 @@ const GET_CURRENT_ACTIVITIES = gql`query{
     kind
     content
     created_at
+    view_name_arg
     id
     humidity_temperature{
       id
@@ -127,7 +128,15 @@ function ActivityScreen({ navigation }) {
               paddingRight: 20
             }}
             >그동안 냉장고에서는 어떤 일이 있었을까요?</Text>
-          {loading === false ? (data.notification.length > 0 ? data.notification.map((item) => <NotificationEntity item={item}/>) : <EmptyIcon />) : <Spinner/>}
+          {loading === false ? (data.notification.length > 0 ? (
+            <Layout style={{
+              flex: 1,
+              paddingLeft: 20,
+              paddingRight: 20,
+            }}>
+              {data.notification.map((item) => <NotificationEntity item={item} navigation={navigation}/>)}
+            </Layout>
+          ) : <EmptyIcon />) : <Spinner/>}
           <Layout style={{
             alignItems: 'flex-end',
             paddingLeft: 20,

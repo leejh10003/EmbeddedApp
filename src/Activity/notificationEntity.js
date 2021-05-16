@@ -68,13 +68,14 @@ export const EmptyIcon = () => {
     <Text category='s2'>알림 내용이 없습니다.</Text>
   </Layout>)
 }
-export default ({item}) => (
+export default ({item, navigation}) => (
   <Card
     status={item.kind}
     header={headerProps => renderItemHeader(headerProps, item)}
     style={{
       marginBottom: 10
     }}
+    onPress={() => console.log(JSON.stringify(navigation))}
     >
       {/*footer={renderItemFooter} */}
     <Text>
