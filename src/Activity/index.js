@@ -41,33 +41,9 @@ const GET_CURRENT_ACTIVITIES = gql`query{
     created_at
     view_name_arg
     id
-    humidity_temperature{
-      id
-      stock{
-        id
-        name
-        weights(limit: 1, order_by: [{id: desc}]){
-          id
-          value
-          images(limit: 1, order_by: [{id: desc}]){
-            id
-            url
-          }
-        }
-      }
-    }
-    weight {
-      stock{
-        id
-        name
-      }
-      id
-      value
-      images(limit: 1, order_by: [{id: desc}]){
-        id
-        url
-      }
-    }
+    route_kind
+    stock_id
+    tray_id
     stock {
       id
       name

@@ -75,7 +75,7 @@ export default ({item, navigation}) => (
     style={{
       marginBottom: 10
     }}
-    onPress={() => console.log(JSON.stringify(navigation))}
+    onPress={() => navigation.navigate(item.route_kind, {name: item.view_name_arg,id: item.stock_id || item.tray_id})}
     >
       {/*footer={renderItemFooter} */}
     <Text>
