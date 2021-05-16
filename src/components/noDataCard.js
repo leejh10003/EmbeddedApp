@@ -3,7 +3,10 @@ import { View, Dimensions } from 'react-native';
 import { Text, Card} from '@ui-kitten/components';
 import LinearGradient from 'react-native-linear-gradient';
 
-export default ({colors, title, subtitle}) => (<Card
+export default ({colors, title, subtitle, style}) => (<Card
+  style={{
+    ...style
+  }}
   header={() => (<View
     style={{
       alignItems: 'center',
@@ -18,8 +21,8 @@ export default ({colors, title, subtitle}) => (<Card
     }}
     end={{ x: 1, y: 0 }}
   style={{
-    width: Dimensions.get("window").width - 80,
     height: 220,
+    width: Dimensions.get("window").width - 80,
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,

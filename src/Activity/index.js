@@ -184,13 +184,19 @@ function ActivityScreen({ navigation }) {
                 data={data.temperature_humidity}
                 layout={'default'}
                 sliderWidth={Dimensions.get('window').width}
-                itemWidth={Dimensions.get('window').width - 80}
+                itemWidth={Dimensions.get('window').width - 60}
                 inactiveSlideShift={0}
+                inactiveSlideScale={1}
                 useScrollView={true}
+                loop={true}
                 renderItem={({item, index}) => {
                   if (item?.humidity_temperatures?.length > 0){
                     return (
                       <LineGraphCard
+                      style={{
+                        width: Dimensions.get('window').width - 80,
+                        marginLeft: 10
+                      }}
                       onPress={() => navigation.navigate('온도', {id: item.id, name: item.name})}
                       data={{
                         labels: item?.humidity_temperatures?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
@@ -212,6 +218,10 @@ function ActivityScreen({ navigation }) {
                     />);
                   } else {
                     return (<NoDataCard
+                      style={{
+                        width: Dimensions.get('window').width - 80,
+                        marginLeft: 10
+                      }}
                       colors={["#ffb2dd", "#ff80ab"]}
                       title={item.name}
                       subtitle="평균 온도"
@@ -246,13 +256,18 @@ function ActivityScreen({ navigation }) {
                 data={data.temperature_humidity}
                 layout={'default'}
                 sliderWidth={Dimensions.get('window').width}
-                itemWidth={Dimensions.get('window').width - 80}
+                itemWidth={Dimensions.get('window').width - 60}
+                inactiveSlideScale={1}
                 inactiveSlideShift={0}
                 useScrollView={true}
+                loop={true}
                 renderItem={({item, index}) => {
                   if (item?.humidity_temperatures?.length > 0){
-                    return (
-                      <LineGraphCard
+                    return (<LineGraphCard
+                      style={{
+                        width: Dimensions.get('window').width - 80,
+                        marginLeft: 10
+                      }}
                       data={{
                         labels: item?.humidity_temperatures?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
                         datasets: [
@@ -271,9 +286,13 @@ function ActivityScreen({ navigation }) {
                         <Text style={{color: 'grey'}}>평균 습도</Text>
                         <Text style={{fontWeight: 'bold'}}>{(item?.humidity_temperatures?.map((element) => element.humidity)?.reduce((prev, next) => prev + next, 0) / Math.max(item.humidity_temperatures.length, 1)).toFixed(2)}%</Text>
                       </View>)}
-                    />)
+                    />);
                   } else {
                     return (<NoDataCard
+                      style={{
+                        width: Dimensions.get('window').width - 80,
+                        marginLeft: 10
+                      }}
                       colors={["#b5ffff", "#b6e3ff"]}
                       title={item.name}
                       subtitle="평균 온도"
