@@ -84,7 +84,7 @@ export default ({navigation, route: {params: { id, name }}}) => {
                   width: Dimensions.get('window').width - 80,
                   marginLeft: 40
                 }}
-                onPress={() => navigation.navigate('습도', {id: data?.tray?.[0]?.stocks?.[0]?.id, name: data?.tray?.[0]?.stocks?.[0]?.name})}
+                onPress={() => navigation.navigate('저장량', {id, name })}
                 data={{
                   labels: data?.tray?.[0]?.stocks?.[0]?.weights?.slice()?.reverse()?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
                   datasets: [

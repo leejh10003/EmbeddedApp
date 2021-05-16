@@ -16,6 +16,7 @@ import Temperature from './temperature';
 import Humidity from './humidity';
 import NoDataCard from '../components/noDataCard';
 import Tray from './tray';
+import Stock from './stock';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -326,6 +327,7 @@ export default () => {
       <HomeStack.Screen name="온도" component={Temperature} />
       <HomeStack.Screen name="습도" component={Humidity} />
       <HomeStack.Screen name="트레이" component={Tray} />
+      <HomeStack.Screen name="저장량" component={Stock} />
     </HomeStack.Navigator>
   );
 } 
