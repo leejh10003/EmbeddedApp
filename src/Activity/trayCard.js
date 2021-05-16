@@ -2,7 +2,8 @@ import * as React from 'react';
 import { View, Dimensions, Image } from 'react-native';
 import { Text, Layout, Icon, Card} from '@ui-kitten/components';
 const getCelsius = (temp) => !!!(temp) || isNaN(temp) ? '정보 없음' : `${temp - 273}`
-export default ({item}) => (<Card
+export default ({item, style}) => (<Card
+  style={style}
   header={() => (
     <View style={{flexDirection:'row', alignItems:'center'}}>
       <Image source={{uri: item?.thumbnail?.[0]?.weights?.[0]?.images?.[0]?.url}}

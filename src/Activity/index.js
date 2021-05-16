@@ -150,12 +150,18 @@ function ActivityScreen({ navigation }) {
               data={data.tray}
               layout={'default'}
               sliderWidth={Dimensions.get('window').width}
-              itemWidth={Dimensions.get('window').width - 80}
-              loop={true}
+              itemWidth={Dimensions.get('window').width - 60}
               inactiveSlideShift={0}
+              inactiveSlideScale={1}
               useScrollView={true}
+              loop={true}
               renderItem={({item, index}) => (
-                <Tray item={item} />
+                <Tray
+                  style={{
+                    width: Dimensions.get('window').width - 80,
+                    marginLeft: 10
+                  }}
+                  item={item} />
               )}
             /> : <EmptyIcon />) : <Spinner/>}
           <Layout style={{paddingBottom: 20}} />
