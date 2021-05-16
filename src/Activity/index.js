@@ -12,6 +12,8 @@ import Carousel from 'react-native-snap-carousel';
 import Tray from './tray';
 import moment from 'moment';
 import LineGraphCard from '../components/lineGraphCard';
+import Temperature from './temperature';
+import Humidity from './humidity';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -23,9 +25,10 @@ const styles = StyleSheet.create({
 });
 
 const GET_CURRENT_ACTIVITIES = gql`query{
-  temperature: stock{
+  temperature_humidity: stock{
+    id
     name
-    humidity_temperatures(order_by: {id:asc}){
+    humidity_temperatures(order_by: {id:asc}, limit: 6){
       id
       temperature
       humidity
@@ -190,29 +193,92 @@ function ActivityScreen({ navigation }) {
               paddingRight: 20
             }}
             >안정적인 온도를 유지하세요!</Text>
-            {loading === false ? (<LineGraphCard
-              data={{
-                labels: data.temperature[0].humidity_temperatures.map((element) => moment(element.created_at).local().format('HH:mm')),
-                datasets: [
-                  {
-                    data: data.temperature[0].humidity_temperatures.map((element) => element.temperature - 273),
-                  },
-                ]
-              }}
-              yAxisSuffix="°C"
-              backgroundColor="#18ffff"
-              backgroundGradientFrom="#40c4ff"
-              backgroundGradientTo="#448aff"
-              style={{
-                marginLeft: 40,
-                marginRight: 40
-              }}
-              name={data.temperature[0].name}
-              body={(<View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={{color: 'grey'}}>평균 온도</Text>
-                <Text style={{fontWeight: 'bold'}}>{(data.temperature[0].humidity_temperatures.map((element) => element.temperature - 273).reduce((prev, next) => prev + next, 0) / data.temperature[0].humidity_temperatures.length).toFixed(2)}</Text>
-              </View>)}
-            />) : <Spinner />}
+            {loading === false ? (
+              <Carousel
+                data={data.temperature_humidity}
+                layout={'default'}
+                sliderWidth={Dimensions.get('window').width}
+                itemWidth={Dimensions.get('window').width - 80}
+                loop={true}
+                inactiveSlideShift={0}
+                useScrollView={true}
+                renderItem={({item, index}) => (
+                  <LineGraphCard
+                  onPress={() => navigation.navigate('온도', {id: item.id, name: item.name})}
+                  data={{
+                    labels: item.humidity_temperatures.map((element) => moment(element.created_at).local().format('HH:mm')),
+                    datasets: [
+                      {
+                        data: item.humidity_temperatures.map((element) => element.temperature - 273),
+                      },
+                    ]
+                  }}
+                  yAxisSuffix="°C"
+                  backgroundColor="#18ffff"
+                  backgroundGradientFrom="#ff79b0"
+                  backgroundGradientTo="#f50057"
+                  name={item.name}
+                  body={(<View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={{color: 'grey'}}>평균 온도</Text>
+                    <Text style={{fontWeight: 'bold'}}>{(item.humidity_temperatures.map((element) => element.temperature - 273).reduce((prev, next) => prev + next, 0) / item.humidity_temperatures.length).toFixed(2)}°C</Text>
+                  </View>)}
+                />
+                )}
+              />) : <Spinner />}
+          
+          <Layout style={{paddingBottom: 20}} />
+          <Divider style={{
+            marginLeft: 20,
+            marginRight: 20,
+          }}/>
+          <Text
+            category='h1'
+            style={{
+              marginTop: 30,
+              paddingLeft: 20,
+              paddingRight: 20
+            }}>습도</Text>
+          <Text
+            category='s2'
+            style={{
+              marginTop: 5,
+              paddingBottom: 40,
+              paddingLeft: 20,
+              paddingRight: 20
+            }}
+            >적당한 습도는 신선도 유지에 필수!</Text>
+            {loading === false ? (
+              <Carousel
+                data={data.temperature_humidity}
+                layout={'default'}
+                sliderWidth={Dimensions.get('window').width}
+                itemWidth={Dimensions.get('window').width - 80}
+                loop={true}
+                inactiveSlideShift={0}
+                useScrollView={true}
+                renderItem={({item, index}) => (
+                  <LineGraphCard
+                  data={{
+                    labels: item.humidity_temperatures.map((element) => moment(element.created_at).local().format('HH:mm')),
+                    datasets: [
+                      {
+                        data: item.humidity_temperatures.map((element) => element.humidity),
+                      },
+                    ]
+                  }}
+                  yAxisSuffix="%"
+                  backgroundColor="#18ffff"
+                  backgroundGradientFrom="#40c4ff"
+                  backgroundGradientTo="#448aff"
+                  name={item.name}
+                  onPress={() => navigation.navigate('습도', {id: item.id, name: item.name})}
+                  body={(<View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={{color: 'grey'}}>평균 습도</Text>
+                    <Text style={{fontWeight: 'bold'}}>{(item.humidity_temperatures.map((element) => element.humidity).reduce((prev, next) => prev + next, 0) / item.humidity_temperatures.length).toFixed(2)}%</Text>
+                  </View>)}
+                />
+                )}
+              />) : <Spinner />}
           <Layout style={{paddingBottom: 30}} />
         </Layout>
       </ScrollView>
@@ -227,6 +293,8 @@ export default () => {
     <HomeStack.Navigator headerMode='none'>
       <HomeStack.Screen name="현재 활동" component={ActivityScreen} />
       <HomeStack.Screen name="알림" component={NotificationScreen} />
+      <HomeStack.Screen name="온도" component={Temperature} />
+      <HomeStack.Screen name="습도" component={Humidity} />
     </HomeStack.Navigator>
   );
 } 

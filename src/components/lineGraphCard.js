@@ -6,6 +6,7 @@ import { Text, Card} from '@ui-kitten/components';
 export default (props) => {
   return (<Card
     style={props.style}
+    onPress={props.onPress}
     header={() => (<LineGraph
       data={props.data}
       style={{
