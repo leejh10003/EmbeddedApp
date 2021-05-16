@@ -187,28 +187,33 @@ function ActivityScreen({ navigation }) {
                 loop={true}
                 inactiveSlideShift={0}
                 useScrollView={true}
-                renderItem={({item, index}) => (
-                  <LineGraphCard
-                  onPress={() => navigation.navigate('온도', {id: item.id, name: item.name})}
-                  data={{
-                    labels: item.humidity_temperatures.map((element) => moment(element.created_at).local().format('HH:mm')),
-                    datasets: [
-                      {
-                        data: item.humidity_temperatures.map((element) => element.temperature - 273),
-                      },
-                    ]
-                  }}
-                  yAxisSuffix="°C"
-                  backgroundColor="#18ffff"
-                  backgroundGradientFrom="#ff79b0"
-                  backgroundGradientTo="#f50057"
-                  name={item.name}
-                  body={(<View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{color: 'grey'}}>평균 온도</Text>
-                    <Text style={{fontWeight: 'bold'}}>{(item.humidity_temperatures.map((element) => element.temperature - 273).reduce((prev, next) => prev + next, 0) / item.humidity_temperatures.length).toFixed(2)}°C</Text>
-                  </View>)}
-                />
-                )}
+                renderItem={({item, index}) => {
+                  if (item?.humidity_temperatures?.length > 0){
+                    return (
+                      <LineGraphCard
+                      onPress={() => navigation.navigate('온도', {id: item.id, name: item.name})}
+                      data={{
+                        labels: item?.humidity_temperatures?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
+                        datasets: [
+                          {
+                            data: item?.humidity_temperatures?.map((element) => element.temperature - 273) ?? [],
+                          },
+                        ]
+                      }}
+                      yAxisSuffix="°C"
+                      backgroundColor="#18ffff"
+                      backgroundGradientFrom="#ff79b0"
+                      backgroundGradientTo="#f50057"
+                      name={item.name}
+                      body={(<View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{color: 'grey'}}>평균 온도</Text>
+                        <Text style={{fontWeight: 'bold'}}>{(item?.humidity_temperatures?.map((element) => element?.temperature - 273)?.reduce((prev, next) => prev + next, 0) / Math.max(item?.humidity_temperatures?.length, 1)).toFixed(2)}°C</Text>
+                      </View>)}
+                    />);
+                  } else {
+                    return (<Card></Card>)
+                  }
+                }}
               />) : <Spinner />}
           
           <Layout style={{paddingBottom: 20}} />
@@ -241,28 +246,33 @@ function ActivityScreen({ navigation }) {
                 loop={true}
                 inactiveSlideShift={0}
                 useScrollView={true}
-                renderItem={({item, index}) => (
-                  <LineGraphCard
-                  data={{
-                    labels: item.humidity_temperatures.map((element) => moment(element.created_at).local().format('HH:mm')),
-                    datasets: [
-                      {
-                        data: item.humidity_temperatures.map((element) => element.humidity),
-                      },
-                    ]
-                  }}
-                  yAxisSuffix="%"
-                  backgroundColor="#18ffff"
-                  backgroundGradientFrom="#40c4ff"
-                  backgroundGradientTo="#448aff"
-                  name={item.name}
-                  onPress={() => navigation.navigate('습도', {id: item.id, name: item.name})}
-                  body={(<View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{color: 'grey'}}>평균 습도</Text>
-                    <Text style={{fontWeight: 'bold'}}>{(item.humidity_temperatures.map((element) => element.humidity).reduce((prev, next) => prev + next, 0) / item.humidity_temperatures.length).toFixed(2)}%</Text>
-                  </View>)}
-                />
-                )}
+                renderItem={({item, index}) => {
+                  if (item?.humidity_temperatures?.length > 0){
+                    return (
+                      <LineGraphCard
+                      data={{
+                        labels: item?.humidity_temperatures?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
+                        datasets: [
+                          {
+                            data: item?.humidity_temperatures?.map((element) => element.humidity) ?? [],
+                          },
+                        ]
+                      }}
+                      yAxisSuffix="%"
+                      backgroundColor="#18ffff"
+                      backgroundGradientFrom="#40c4ff"
+                      backgroundGradientTo="#448aff"
+                      name={item.name}
+                      onPress={() => navigation.navigate('습도', {id: item.id, name: item.name})}
+                      body={(<View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{color: 'grey'}}>평균 습도</Text>
+                        <Text style={{fontWeight: 'bold'}}>{(item?.humidity_temperatures?.map((element) => element.humidity)?.reduce((prev, next) => prev + next, 0) / Math.max(item.humidity_temperatures.length, 1)).toFixed(2)}%</Text>
+                      </View>)}
+                    />)
+                  } else {
+                    return (<Card></Card>)
+                  }
+                }}
               />) : <Spinner />}
           <Layout style={{paddingBottom: 30}} />
         </Layout>
