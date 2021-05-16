@@ -9,7 +9,7 @@ import theme from '../../theme.json';
 import NotificationScreen from './notification';
 import NotificationEntity, { EmptyIcon } from './notificationEntity';
 import Carousel from 'react-native-snap-carousel';
-import Tray from './tray';
+import Tray from './trayCard';
 import moment from 'moment';
 import LineGraphCard from '../components/lineGraphCard';
 import Temperature from './temperature';
