@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, ScrollView, Dimension, Dimensions, Image } from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, Button, Divider, Layout, Spinner, Icon, Card} from '@ui-kitten/components';
@@ -10,8 +10,8 @@ import NotificationScreen from './notification';
 import NotificationEntity, { EmptyIcon } from './notificationEntity';
 import Carousel from 'react-native-snap-carousel';
 import Tray from './tray';
-import { LineChart } from 'react-native-chart-kit';
 import moment from 'moment';
+import LineGraphCard from '../components/lineGraphCard';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -190,12 +190,7 @@ function ActivityScreen({ navigation }) {
               paddingRight: 20
             }}
             >안정적인 온도를 유지하세요!</Text>
-            {loading === false ? <Card
-            style={{
-              width: Dimensions.get('window').width - 80,
-              marginLeft: 40
-            }}
-            header={() => (<LineChart
+            {loading === false ? (<LineGraphCard
               data={{
                 labels: data.temperature[0].humidity_temperatures.map((element) => moment(element.created_at).local().format('HH:mm')),
                 datasets: [
@@ -204,33 +199,20 @@ function ActivityScreen({ navigation }) {
                   },
                 ]
               }}
-              width={Dimensions.get("window").width - 80} // from react-native
-              height={220}
               yAxisSuffix="°C"
-              withOuterLines={false}
-              withDots={false}
-              withShadow={true}
-              chartConfig={{
-                backgroundColor: "#18ffff",
-                backgroundGradientFrom: "#40c4ff",
-                backgroundGradientTo: "#448aff",
-                color: (opacity=1) => `rgba(255, 255, 255, 0.8)`,
-                labelColor: (opacity) => `rgba(255, 255, 255, 1)`,
-                decimalPlaces: 2, // optional, defaults to 2dp
-                style: {
-                  borderRadius: 0,
-                },
+              backgroundColor="#18ffff"
+              backgroundGradientFrom="#40c4ff"
+              backgroundGradientTo="#448aff"
+              style={{
+                marginLeft: 40,
+                marginRight: 40
               }}
-              bezier
-            />)}>
-            <Text category='h5'>
-              {data.temperature[0].name}
-            </Text>
-            <View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={{color: 'grey'}}>평균 온도</Text>
-              <Text style={{fontWeight: 'bold'}}>{(data.temperature[0].humidity_temperatures.map((element) => element.temperature - 273).reduce((prev, next) => prev + next, 0) / data.temperature[0].humidity_temperatures.length).toFixed(2)}</Text>
-            </View>
-            </Card> : <Spinner />}
+              name={data.temperature[0].name}
+              body={(<View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text style={{color: 'grey'}}>평균 온도</Text>
+                <Text style={{fontWeight: 'bold'}}>{(data.temperature[0].humidity_temperatures.map((element) => element.temperature - 273).reduce((prev, next) => prev + next, 0) / data.temperature[0].humidity_temperatures.length).toFixed(2)}</Text>
+              </View>)}
+            />) : <Spinner />}
           <Layout style={{paddingBottom: 30}} />
         </Layout>
       </ScrollView>
