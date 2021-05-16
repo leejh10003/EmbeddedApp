@@ -14,6 +14,7 @@ import moment from 'moment';
 import LineGraphCard from '../components/lineGraphCard';
 import Temperature from './temperature';
 import Humidity from './humidity';
+import NoDataCard from '../components/noDataCard';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -184,7 +185,6 @@ function ActivityScreen({ navigation }) {
                 layout={'default'}
                 sliderWidth={Dimensions.get('window').width}
                 itemWidth={Dimensions.get('window').width - 80}
-                loop={true}
                 inactiveSlideShift={0}
                 useScrollView={true}
                 renderItem={({item, index}) => {
@@ -211,7 +211,11 @@ function ActivityScreen({ navigation }) {
                       </View>)}
                     />);
                   } else {
-                    return (<Card></Card>)
+                    return (<NoDataCard
+                      colors={["#ffb2dd", "#ff80ab"]}
+                      title={item.name}
+                      subtitle="평균 온도"
+                    />);
                   }
                 }}
               />) : <Spinner />}
@@ -243,7 +247,6 @@ function ActivityScreen({ navigation }) {
                 layout={'default'}
                 sliderWidth={Dimensions.get('window').width}
                 itemWidth={Dimensions.get('window').width - 80}
-                loop={true}
                 inactiveSlideShift={0}
                 useScrollView={true}
                 renderItem={({item, index}) => {
@@ -270,7 +273,11 @@ function ActivityScreen({ navigation }) {
                       </View>)}
                     />)
                   } else {
-                    return (<Card></Card>)
+                    return (<NoDataCard
+                      colors={["#b5ffff", "#b6e3ff"]}
+                      title={item.name}
+                      subtitle="평균 온도"
+                    />)
                   }
                 }}
               />) : <Spinner />}
