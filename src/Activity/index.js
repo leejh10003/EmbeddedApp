@@ -28,16 +28,6 @@ const styles = StyleSheet.create({
 });
 
 const GET_CURRENT_ACTIVITIES = gql`query{
-  temperature_humidity: stock{
-    id
-    name
-    humidity_temperatures(order_by: {id:desc}, limit: 6){
-      id
-      temperature
-      humidity
-      created_at
-    }
-  }
   notification(limit: 3, order_by: [{id: desc}]){
     kind
     content
@@ -191,7 +181,7 @@ function ActivityScreen({ navigation }) {
             >안정적인 온도를 유지하세요!</Text>
             {loading === false ? (
               <Carousel
-                data={data.temperature_humidity}
+                data={data.tray}
                 layout={'default'}
                 sliderWidth={Dimensions.get('window').width}
                 itemWidth={Dimensions.get('window').width - 60}
@@ -200,19 +190,20 @@ function ActivityScreen({ navigation }) {
                 useScrollView={true}
                 loop={true}
                 renderItem={({item, index}) => {
-                  if (item?.humidity_temperatures?.length > 0){
+                  const stock = item?.stocks?.[0];
+                  if (stock?.humidity_temperatures?.length > 0){
                     return (
                       <LineGraphCard
                       style={{
                         width: Dimensions.get('window').width - 80,
                         marginLeft: 10
                       }}
-                      onPress={() => navigation.navigate('온도', {id: item.id, name: item.name})}
+                      onPress={() => navigation.navigate('온도', {id: stock.id, name: stock.name})}
                       data={{
-                        labels: item?.humidity_temperatures?.slice()?.reverse()?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
+                        labels: stock?.humidity_temperatures?.slice()?.reverse()?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
                         datasets: [
                           {
-                            data: item?.humidity_temperatures?.slice()?.reverse()?.map((element) => element.temperature - 273) ?? [],
+                            data: stock?.humidity_temperatures?.slice()?.reverse()?.map((element) => element.temperature - 273) ?? [],
                           },
                         ]
                       }}
@@ -220,10 +211,10 @@ function ActivityScreen({ navigation }) {
                       backgroundColor="#18ffff"
                       backgroundGradientFrom="#ff79b0"
                       backgroundGradientTo="#f50057"
-                      name={item.name}
+                      name={stock.name}
                       body={(<View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{color: 'grey'}}>평균 온도</Text>
-                        <Text style={{fontWeight: 'bold'}}>{(item?.humidity_temperatures?.map((element) => element?.temperature - 273)?.reduce((prev, next) => prev + next, 0) / Math.max(item?.humidity_temperatures?.length, 1)).toFixed(2)}°C</Text>
+                        <Text style={{fontWeight: 'bold'}}>{(stock?.humidity_temperatures?.map((element) => element?.temperature - 273)?.reduce((prev, next) => prev + next, 0) / Math.max(stock?.humidity_temperatures?.length, 1)).toFixed(2)}°C</Text>
                       </View>)}
                     />);
                   } else {
@@ -233,7 +224,7 @@ function ActivityScreen({ navigation }) {
                         marginLeft: 10
                       }}
                       colors={["#ffb2dd", "#ff80ab"]}
-                      title={item.name}
+                      title={stock?.name}
                       subtitle="평균 온도"
                     />);
                   }
@@ -263,7 +254,7 @@ function ActivityScreen({ navigation }) {
             >적당한 습도는 신선도 유지에 필수!</Text>
             {loading === false ? (
               <Carousel
-                data={data.temperature_humidity}
+                data={data.tray}
                 layout={'default'}
                 sliderWidth={Dimensions.get('window').width}
                 itemWidth={Dimensions.get('window').width - 60}
@@ -272,17 +263,18 @@ function ActivityScreen({ navigation }) {
                 useScrollView={true}
                 loop={true}
                 renderItem={({item, index}) => {
-                  if (item?.humidity_temperatures?.length > 0){
+                  const stock = item?.stocks?.[0];
+                  if (stock?.humidity_temperatures?.length > 0){
                     return (<LineGraphCard
                       style={{
                         width: Dimensions.get('window').width - 80,
                         marginLeft: 10
                       }}
                       data={{
-                        labels: item?.humidity_temperatures?.slice()?.reverse()?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
+                        labels: stock?.humidity_temperatures?.slice()?.reverse()?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
                         datasets: [
                           {
-                            data: item?.humidity_temperatures?.slice()?.reverse()?.map((element) => element.humidity) ?? [],
+                            data: stock?.humidity_temperatures?.slice()?.reverse()?.map((element) => element.humidity) ?? [],
                           },
                         ]
                       }}
@@ -290,11 +282,11 @@ function ActivityScreen({ navigation }) {
                       backgroundColor="#18ffff"
                       backgroundGradientFrom="#40c4ff"
                       backgroundGradientTo="#448aff"
-                      name={item.name}
-                      onPress={() => navigation.navigate('습도', {id: item.id, name: item.name})}
+                      name={stock.name}
+                      onPress={() => navigation.navigate('습도', {id: stock.id, name: stock.name})}
                       body={(<View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{color: 'grey'}}>평균 습도</Text>
-                        <Text style={{fontWeight: 'bold'}}>{(item?.humidity_temperatures?.map((element) => element.humidity)?.reduce((prev, next) => prev + next, 0) / Math.max(item.humidity_temperatures.length, 1)).toFixed(2)}%</Text>
+                        <Text style={{fontWeight: 'bold'}}>{(stock?.humidity_temperatures?.map((element) => element.humidity)?.reduce((prev, next) => prev + next, 0) / Math.max(stock.humidity_temperatures.length, 1)).toFixed(2)}%</Text>
                       </View>)}
                     />);
                   } else {
@@ -304,7 +296,7 @@ function ActivityScreen({ navigation }) {
                         marginLeft: 10
                       }}
                       colors={["#b5ffff", "#b6e3ff"]}
-                      title={item.name}
+                      title={stock.name}
                       subtitle="평균 온도"
                     />)
                   }
