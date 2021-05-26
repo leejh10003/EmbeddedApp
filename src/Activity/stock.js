@@ -14,9 +14,10 @@ const STOCK_SUBSCRIPTION = gql`subscription StockSubscription($id: Int!){
       name
       id
       weights(limit: 6, order_by: {id:desc}){
+        id
         value
         created_at
-        images(limit: 1, order_by: {id: desc}){
+        images(order_by: {id: asc}){
           url
         }
       }
@@ -30,10 +31,13 @@ const BackIcon = (props) => (
 
 const ListEntity = ({item, index}) => (<ListItem 
   accessoryLeft={() => (<Icon style={{width: 30, height: 30}} fill={item.delta === null || item.delta === 0 ? `grey` : (item.delta > 0 ? "#ff79b0" : "#40c4ff") } name={item.delta === null || item.delta === 0 ? `thermometer-outline` : (item.delta > 0 ? `thermometer-plus-outline` : `thermometer-minus-outline`)}/>)}
-  title={`${item.temperature - 273}°C`}
-  accessoryRight={() => <Layout style={{alignItems: 'center'}}>
-    <Layout style={{flexDirection:'row', alignItems:'center'}}>{item.delta !== null && item.delta !== 0 ? <Icon style={{width: 10, height: 10}}  fill={item.delta > 0 ? `red` : `blue`} name={item.delta > 0 ? `arrow-up-outline` : `arrow-down-outline`}/> : null}<Text style={{color: item.delta != null && item.delta !== 0 ? (item.delta > 0 ? `red` : `blue`) : `grey`}}>{item.delta !== null ? `${Math.abs(item.delta)}` : `-`}</Text></Layout>
-    <Text style={{fontSize: 10, color: 'grey'}}>{moment(item.created_at).local().format('HH:mm')}</Text>
+  title={`${item.id}${item.value}°C`}
+  accessoryRight={() => <Layout style={{flowDirection:'row'}}>
+    {item?.images?.length > 1 ? <Icon name='collections' /> : (item?.images?.length === 1 ? <Icon name='image' /> : <Layout/> )}
+    <Layout style={{alignItems: 'center'}}>
+      <Layout style={{flexDirection:'row', alignItems:'center'}}>{item.delta !== null && item.delta !== 0 ? <Icon style={{width: 10, height: 10}}  fill={item.delta > 0 ? `red` : `blue`} name={item.delta > 0 ? `arrow-up-outline` : `arrow-down-outline`}/> : null}<Text style={{color: item.delta != null && item.delta !== 0 ? (item.delta > 0 ? `red` : `blue`) : `grey`}}>{item.delta !== null ? `${Math.abs(item.delta)}` : `-`}</Text></Layout>
+      <Text style={{fontSize: 10, color: 'grey'}}>{moment(item.created_at).local().format('HH:mm')}</Text>
+    </Layout>
   </Layout>}
 />)
 
@@ -54,10 +58,35 @@ export default ({navigation, route: {params: { id, name }}}) => {
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <TopNavigation title={`${name} 저장량`} alignment='center' accessoryLeft={BackAction}/>
       <Divider/>
-        {
+      {
           loading === false ? (
-          <Text>{JSON.stringify(data)}</Text>) : (<Spinner/>) 
-        }
+          <List
+            ItemSeparatorComponent={Divider}
+            ListHeaderComponent={<LineGraph
+              data={{
+                labels: data?.tray?.[0]?.stocks?.[0]?.weights?.slice(Math.max(0, data?.tray?.[0]?.stocks?.[0]?.weights?.length - 6), data?.tray?.[0]?.stocks?.[0]?.weights?.length)?.reverse()?.map((element) => moment(element.created_at).local().format('HH:mm')) ?? [],
+                datasets: [
+                  {
+                    data: data?.tray?.[0]?.stocks?.[0]?.weights?.slice(Math.max(0, data?.tray?.[0]?.stocks?.[0]?.weights?.length - 6), data?.tray?.[0]?.stocks?.[0]?.weights?.length)?.reverse()?.map((element) => element.value) ?? [],
+                  },
+                ]
+              }}
+              style={{
+                width: Dimensions.get("window").width,
+                height: Dimensions.get("window").width * 9 / 16
+              }}
+              yAxisSuffix="g"
+              backgroundColor="#18ffff"
+              backgroundGradientFrom="#00e676"
+              backgroundGradientTo="#32cb00"
+              />}
+            data={data?.tray?.[0]?.stocks?.[0]?.weights.map((element, index) => ({
+              ...element,
+              delta: index === data?.tray?.[0]?.stocks?.[0]?.weights.length - 1 ? null : data?.tray?.[0]?.stocks?.[0]?.weights[index].value - data?.tray?.[0]?.stocks?.[0]?.weights[index + 1].value
+            }))}
+            renderItem={ListEntity}
+          />) : (<Spinner/>)
+          }
     </SafeAreaView>
   );
 };

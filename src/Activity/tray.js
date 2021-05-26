@@ -97,19 +97,19 @@ export default ({navigation, route: {params: { id, name }}}) => {
                 backgroundColor="#18ffff"
                 backgroundGradientFrom="#00e676"
                 backgroundGradientTo="#32cb00"
-                name={''}
+                name={data?.tray?.[0]?.stocks?.[0].name ?? ''}
                 body={(<View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                   <Text style={{color: 'grey'}}>평균 저장량</Text>
-                  <Text style={{fontWeight: 'bold'}}>{(data?.tray?.[0]?.stocks?.[0]?.weights?.map((element) => element.value)?.reduce((prev, next) => prev + next, 0) / Math.max(data?.tray?.[0]?.stocks?.[0]?.weights?.length, 1)).toFixed(2)}g</Text>
+                  <Text style={{fontWeight: 'bold'}}>{(() => {var a = (data?.tray?.[0]?.stocks?.[0]?.weights?.map((element) => element.value)?.reduce((prev, next) => prev + next, 0) / Math.max(data?.tray?.[0]?.stocks?.[0]?.weights?.length, 1))?.toFixed(2); return a != undefined ? `${a}g` : ''})()}</Text>
                 </View>)}
               />) : (<NoDataCard
                 style={{
                   width: Dimensions.get('window').width - 80,
-                  marginLeft: 10
+                  marginLeft: 40
                 }}
                 colors={["#9cff57", "#b0ff57"]}
-                title={name}
-                subtitle="평균 온도"
+                title={data?.tray?.[0]?.stocks?.[0].name ?? ''}
+                subtitle="평균 저장량"
               />)}
               <Layout style={{paddingBottom: 20}} />
               <Text
@@ -147,7 +147,7 @@ export default ({navigation, route: {params: { id, name }}}) => {
                   backgroundColor="#18ffff"
                   backgroundGradientFrom="#ff79b0"
                   backgroundGradientTo="#f50057"
-                  name={''}
+                  name={data?.tray?.[0]?.stocks?.[0].name ?? ''}
                   body={(<View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text style={{color: 'grey'}}>평균 온도</Text>
                     <Text style={{fontWeight: 'bold'}}>{(data?.tray?.[0]?.stocks?.[0]?.humidity_temperatures?.map((element) => element?.temperature - 273)?.reduce((prev, next) => prev + next, 0) / Math.max(data?.tray?.[0]?.stocks?.[0]?.humidity_temperatures?.length, 1)).toFixed(2)}°C</Text>
@@ -155,10 +155,10 @@ export default ({navigation, route: {params: { id, name }}}) => {
                 />) : (<NoDataCard
                   style={{
                     width: Dimensions.get('window').width - 80,
-                    marginLeft: 10
+                    marginLeft: 40
                   }}
                   colors={["#ffb2dd", "#ff80ab"]}
-                  title={name}
+                  title={data?.tray?.[0]?.stocks?.[0].name ?? ''}
                   subtitle="평균 온도"
                 />)
               }
@@ -197,7 +197,7 @@ export default ({navigation, route: {params: { id, name }}}) => {
                   backgroundColor="#18ffff"
                   backgroundGradientFrom="#40c4ff"
                   backgroundGradientTo="#448aff"
-                  name={''}
+                  name={data?.tray?.[0]?.stocks?.[0].name ?? ''}
                   body={(<View style={{marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text style={{color: 'grey'}}>평균 습도</Text>
                     <Text style={{fontWeight: 'bold'}}>{(data?.tray?.[0]?.stocks?.[0]?.humidity_temperatures?.map((element) => element?.humidity)?.reduce((prev, next) => prev + next, 0) / Math.max(data?.tray?.[0]?.stocks?.[0]?.humidity_temperatures?.length, 1)).toFixed(2)}%</Text>
@@ -205,10 +205,10 @@ export default ({navigation, route: {params: { id, name }}}) => {
                 />) : (<NoDataCard
                   style={{
                     width: Dimensions.get('window').width - 80,
-                    marginLeft: 10
+                    marginLeft: 40
                   }}
                   colors={["#b5ffff", "#b6e3ff"]}
-                  title={name}
+                  title={data?.tray?.[0]?.stocks?.[0].name ?? ''}
                   subtitle="평균 습도"
                 />)
               }

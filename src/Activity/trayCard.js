@@ -19,13 +19,13 @@ export default ({item, style, navigation}) => (<Card
   </View>
   <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
     <Text style={{color: 'grey'}}>남은 재료 무게</Text>
-    <Text style={{fontWeight: 'bold'}}>{item?.stocks?.[0]?.weights?.[0]?.value + 'g'?? '정보 없음'}</Text>
+    <Text style={{fontWeight: 'bold'}}>{item?.stocks?.[0]?.weights?.[0]?.value != undefined ?  `${item?.stocks?.[0]?.weights?.[0]?.value}g` : '정보 없음'}</Text>
   </View>
   <View style={{marginTop: 5, flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
     <Icon style={{width: 16, height: 16}} fill='grey' name='thermometer-outline'/>
     <Text>{getCelsius(item?.stocks?.[0]?.humidity_temperatures?.[0]?.temperature)}</Text>
     <Layout style={{marginRight: 10}}/>
     <Icon style={{width: 16, height: 16}} fill='grey' name='droplet-outline'/>
-    <Text>{item?.stocks?.[0]?.humidity_temperatures?.[0]?.humidity + '%' ?? '정보 없음'}</Text>
+    <Text>{item?.stocks?.[0]?.humidity_temperatures?.[0]?.humidity != undefined ? + `${item?.stocks?.[0]?.humidity_temperatures?.[0]?.humidity}%` : '정보 없음'}</Text>
   </View>
 </Card>)
