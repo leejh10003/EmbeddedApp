@@ -11,7 +11,6 @@ import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from, Web, split
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { RetryLink } from '@apollo/client/link/retry';
-import codePush from 'react-native-code-push'
 const client = new ApolloClient({
   link: split(
     ({query}) => {
@@ -31,10 +30,6 @@ const client = new ApolloClient({
   ),
   cache: new InMemoryCache()
 });
-const codePushOptions = {
-  checkFrequency: codePush.CheckFrequency.ON_APP_START,
-  installMode: codePush.InstallMode.IMMEDIATE,
-}
 const App = () => {
   const [theme, setTheme] = React.useState('light');
   const toggleTheme = () => {
@@ -58,4 +53,4 @@ const App = () => {
     </ApolloProvider>
   );
 }
-export default codePush(codePushOptions)(App)
+export default App
