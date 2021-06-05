@@ -55,6 +55,7 @@ const GET_CURRENT_ACTIVITIES = gql`query{
     id
     stocks(limit: 1, order_by: {id: desc}){
       name
+      id
       humidity_temperatures(limit: 1, order_by: {id: desc}){
         temperature
         humidity
