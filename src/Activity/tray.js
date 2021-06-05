@@ -213,7 +213,7 @@ export default ({navigation, route: {params: { id, name }}}) => {
                 />)
               }
             </ScrollView>
-          ) : (<Spinner/>) 
+          ) : (<Layout style={{width: Dimensions.get("window").width, alignItems: 'center'}}><Spinner/></Layout>)
         }
     </SafeAreaView>
   );

@@ -107,7 +107,7 @@ function ActivityScreen({ navigation }) {
             }}>
               {data.notification.map((item) => <NotificationEntity item={item} navigation={navigation}/>)}
             </Layout>
-          ) : <EmptyIcon />) : <Spinner/>}
+          ) : <EmptyIcon />) : (<Layout style={{width: Dimensions.get("window").width, alignItems: 'center'}}><Spinner/></Layout>)}
           <Layout style={{
             alignItems: 'flex-end',
             paddingLeft: 20,
@@ -158,7 +158,7 @@ function ActivityScreen({ navigation }) {
                   }}
                   item={item} />
               )}
-            /> : <EmptyIcon />) : <Spinner/>}
+            /> : <EmptyIcon />) : (<Layout style={{width: Dimensions.get("window").width, alignItems: 'center'}}><Spinner/></Layout>)}
           <Layout style={{paddingBottom: 20}} />
           <Divider style={{
             marginLeft: 20,
@@ -230,7 +230,7 @@ function ActivityScreen({ navigation }) {
                     />);
                   }
                 }}
-              />) : <Spinner />}
+              />) : (<Layout style={{width: Dimensions.get("window").width, alignItems: 'center'}}><Spinner/></Layout>)}
           
           <Layout style={{paddingBottom: 20}} />
           <Divider style={{
@@ -302,7 +302,7 @@ function ActivityScreen({ navigation }) {
                     />)
                   }
                 }}
-              />) : <Spinner />}
+              />) : (<Layout style={{width: Dimensions.get("window").width, alignItems: 'center'}}><Spinner/></Layout>)}
           <Layout style={{paddingBottom: 30}} />
         </Layout>
       </ScrollView>

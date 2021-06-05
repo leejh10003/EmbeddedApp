@@ -74,7 +74,7 @@ export default ({navigation, route: {params: { id, name }}}) => {
               delta: index === data?.stock?.[0]?.humidity_temperatures.length - 1 ? null : data?.stock?.[0]?.humidity_temperatures[index].humidity - data?.stock?.[0]?.humidity_temperatures[index + 1].humidity
             }))}
             renderItem={ListEntity}
-          />) : (<Spinner/>) 
+          />) : (<Layout style={{width: Dimensions.get("window").width, alignItems: 'center'}}><Spinner/></Layout>) 
         }
     </SafeAreaView>
   );

@@ -85,7 +85,7 @@ export default ({navigation, route: {params: { id, name }}}) => {
               delta: index === data?.tray?.[0]?.stocks?.[0]?.weights.length - 1 ? null : data?.tray?.[0]?.stocks?.[0]?.weights[index].value - data?.tray?.[0]?.stocks?.[0]?.weights[index + 1].value
             }))}
             renderItem={ListEntity}
-          />) : (<Spinner/>)
+          />) : (<Layout style={{width: Dimensions.get("window").width, alignItems: 'center'}}><Spinner/></Layout>)
           }
     </SafeAreaView>
   );
