@@ -296,7 +296,7 @@ function ActivityScreen({ navigation }) {
                         marginLeft: 10
                       }}
                       colors={["#b5ffff", "#b6e3ff"]}
-                      title={stock.name}
+                      title={""}
                       subtitle="평균 온도"
                     />)
                   }
