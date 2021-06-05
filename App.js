@@ -39,9 +39,9 @@ const App = () => {
   useEffect(async () => {
     const authStatus = await messaging().requestPermission();
     const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-    /*if (enabled) {
-      await messaging().subscribeToTopic('TO_ALL_USER') //Don't needed
-    }*/
+    if (enabled) {
+      await messaging().subscribeToTopic('TO_ALL_USER')
+    }
   });
   return (
     <ApolloProvider client={client}>
