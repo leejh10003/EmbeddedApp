@@ -44,7 +44,7 @@ export default (props) => {
           paddingRight: 20,
           paddingTop: 30
         }}>
-          {!!!(error) ? (loading === false ? data.notification.length > 0 ? data.notification.map((item) => (<NotificationEntity item={item} {...props} />)) : (<EmptyIcon />) : <Layout style={{paddingTop: 10, alignItems: 'center'}}><Spinner/></Layout>) : <Text>{`${error}`}</Text>}
+          {!!!(error) ? (loading === false ? data.notification.length > 0 ? data.notification.map((item) => (<NotificationEntity key={item.id} item={item} {...props} />)) : (<EmptyIcon />) : <Layout style={{paddingTop: 10, alignItems: 'center'}}><Spinner/></Layout>) : <Text>{`${error}`}</Text>}
         </Layout>
       </ScrollView>
     </SafeAreaView>

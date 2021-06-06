@@ -105,7 +105,7 @@ function ActivityScreen({ navigation }) {
               paddingLeft: 20,
               paddingRight: 20,
             }}>
-              {data.notification.map((item) => <NotificationEntity item={item} navigation={navigation}/>)}
+              {data.notification.map((item) => <NotificationEntity item={item} navigation={navigation} key={item.id}/>)}
             </Layout>
           ) : <EmptyIcon />) : (<Layout style={{width: Dimensions.get("window").width, alignItems: 'center'}}><Spinner/></Layout>)}
           <Layout style={{
@@ -195,6 +195,7 @@ function ActivityScreen({ navigation }) {
                   if (stock?.humidity_temperatures?.length > 0){
                     return (
                       <LineGraphCard
+                      key={item.id}
                       style={{
                         width: Dimensions.get('window').width - 80,
                         marginLeft: 10
@@ -220,6 +221,7 @@ function ActivityScreen({ navigation }) {
                     />);
                   } else {
                     return (<NoDataCard
+                      key={item.id}
                       style={{
                         width: Dimensions.get('window').width - 80,
                         marginLeft: 10

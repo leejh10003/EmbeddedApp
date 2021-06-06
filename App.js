@@ -15,7 +15,6 @@ const client = new ApolloClient({
   link: split(
     ({query}) => {
       const { kind, operation } = getMainDefinition(query);
-      console.log(kind)
       return kind === 'OperationDefinition' && operation === 'subscription';
     },
     new WebSocketLink({
