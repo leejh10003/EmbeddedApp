@@ -30,14 +30,11 @@ const BackIcon = (props) => (
 );
 
 const ListEntity = ({item, index}) => (<ListItem 
-  accessoryLeft={() => (<Icon style={{width: 30, height: 30}} fill={item.delta === null || item.delta === 0 ? `grey` : (item.delta > 0 ? "#ff79b0" : "#40c4ff") } name={item.delta === null || item.delta === 0 ? `thermometer-outline` : (item.delta > 0 ? `thermometer-plus-outline` : `thermometer-minus-outline`)}/>)}
-  title={`${item.id}${item.value}°C`}
+  accessoryLeft={() => (<Icon pack='material' style={{width: 30, height: 30, color: item.delta === null || item.delta === 0 ? `grey` : (item.delta > 0 ? "#ff79b0" : "#40c4ff")}} color={item.delta === null || item.delta === 0 ? `grey` : ("#40c4ff") } name={item.delta === null || item.delta === 0 ? 'shopping-cart' : (item.delta > 0 ? `add-shopping-cart` : `remove-shopping-cart`)}/>)}
+  title={`${item.value}g`}
   accessoryRight={() => <Layout style={{flowDirection:'row'}}>
-    {item?.images?.length > 1 ? <Icon name='collections' /> : (item?.images?.length === 1 ? <Icon name='image' /> : <Layout/> )}
-    <Layout style={{alignItems: 'center'}}>
-      <Layout style={{flexDirection:'row', alignItems:'center'}}>{item.delta !== null && item.delta !== 0 ? <Icon style={{width: 10, height: 10}}  fill={item.delta > 0 ? `red` : `blue`} name={item.delta > 0 ? `arrow-up-outline` : `arrow-down-outline`}/> : null}<Text style={{color: item.delta != null && item.delta !== 0 ? (item.delta > 0 ? `red` : `blue`) : `grey`}}>{item.delta !== null ? `${Math.abs(item.delta)}` : `-`}</Text></Layout>
-      <Text style={{fontSize: 10, color: 'grey'}}>{moment(item.created_at).local().format('HH:mm')}</Text>
-    </Layout>
+    <Layout style={{flexDirection:'row', alignItems:'center'}}>{item.delta !== null && item.delta !== 0 ? <Icon style={{width: 10, height: 10}}  fill={item.delta > 0 ? `red` : `blue`} name={item.delta > 0 ? `arrow-up-outline` : `arrow-down-outline`}/> : null}<Text style={{color: item.delta != null && item.delta !== 0 ? (item.delta > 0 ? `red` : `blue`) : `grey`}}>{item.delta !== null ? `${Math.abs(item.delta)}` : `-`}</Text></Layout>
+    <Text style={{fontSize: 10, color: 'grey'}}>{moment(item.created_at).local().format('HH:mm')}</Text>
   </Layout>}
 />)
 

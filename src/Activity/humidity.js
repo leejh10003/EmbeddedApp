@@ -22,7 +22,7 @@ const HUMIDITY_SUBSCRIPTION = gql`subscription HumiditySubscription($id: Int!){
 }`
 
 const ListEntity = ({item, index}) => (<ListItem 
-  accessoryLeft={() => (<Icon style={{width: 30, height: 30}} fill={item.delta === null || item.delta === 0 ? `grey` : ("#40c4ff") } name={item.delta === null || item.delta === 0 ? `droplet-outline` : (item.delta > 0 ? `droplet` : `droplet-off-outline`)}/>)}
+  accessoryLeft={() => (<Icon style={{width: 30, height: 30}} fill={item.delta === null || item.delta === 0 ? `grey` : (item.delta > 0 ? "#ff79b0" : "#40c4ff") } name={item.delta === null || item.delta === 0 ? `droplet-outline` : (item.delta > 0 ? `droplet` : `droplet-off-outline`)}/>)}
   title={`${item.humidity}%`}
   accessoryRight={() => <Layout style={{alignItems: 'center'}}>
     <Layout style={{flexDirection:'row', alignItems:'center'}}>{item.delta !== null && item.delta !== 0 ? <Icon style={{width: 10, height: 10}}  fill={item.delta > 0 ? `red` : `blue`} name={item.delta > 0 ? `arrow-up-outline` : `arrow-down-outline`}/> : null}<Text style={{color: item.delta != null && item.delta !== 0 ? (item.delta > 0 ? `red` : `blue`) : `grey`}}>{item.delta !== null ? `${Math.abs(item.delta)}` : `-`}</Text></Layout>

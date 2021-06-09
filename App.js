@@ -11,6 +11,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from, Web, split
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { RetryLink } from '@apollo/client/link/retry';
+import { MaterialIconsPack } from './material-icons';
 const client = new ApolloClient({
   link: split(
     ({query}) => {
@@ -44,7 +45,7 @@ const App = () => {
   });
   return (
     <ApolloProvider client={client}>
-      <IconRegistry icons={EvaIconsPack}/>
+      <IconRegistry icons={[EvaIconsPack, MaterialIconsPack]}/>
       <ThemeContext.Provider value={{ theme, toggleTheme }}>
         <ApplicationProvider {...eva} theme={eva[theme]}>
           <SafeAreaProvider>

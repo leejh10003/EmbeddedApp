@@ -7,7 +7,7 @@ import ActivityStackScreen from './Activity';
 import SettingsStackScreen from './Settings';
 
 const SettingIcon = (props) => (
-  <Icon {...props} name='settings-2-outline' />
+  <Icon pack='eva' {...props} name='settings-2-outline' />
 )
 const ActivityIcon = (props) => (
   <Icon {...props} name='activity-outline' />
